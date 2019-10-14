@@ -83,25 +83,25 @@ impl Model {
                     .start(pt2(rect.right() / 3.0, rect.top()))
                     .end(pt2(rect.right() / 3.0, rect.bottom()))
                     .stroke_weight(2.0)
-                    .color(WHITE);
+                    .color(DARKGREY);
                 // left vertical line
                 draw.line()
                     .start(pt2(rect.left() / 3.0, rect.top()))
                     .end(pt2(rect.left() / 3.0, rect.bottom()))
                     .stroke_weight(2.0)
-                    .color(WHITE);
+                    .color(DARKGREY);
                 // bottom horizontal line
                 draw.line()
                     .start(pt2(rect.left(), rect.bottom() / 3.0))
                     .end(pt2(rect.right(), rect.bottom() / 3.0))
                     .stroke_weight(2.0)
-                    .color(WHITE);
+                    .color(DARKGREY);
                 // top horizontal line
                 draw.line()
                     .start(pt2(rect.left(), rect.top() / 3.0))
                     .end(pt2(rect.right(), rect.top() / 3.0))
                     .stroke_weight(2.0)
-                    .color(WHITE);
+                    .color(DARKGREY);
                 self.board.display(draw, &rect);
             }
         }
