@@ -1,5 +1,7 @@
 use nannou::prelude::*;
 mod board;
+mod board_display;
+mod brain;
 mod eval;
 mod field;
 mod player;
@@ -139,11 +141,7 @@ fn model(app: &App) -> Model {
 
 fn event(_app: &App, _model: &mut Model, event: Event) {
     match event {
-        Event::WindowEvent {
-            id: _,
-            raw: _,
-            simple: _,
-        } => {}
+        Event::WindowEvent { .. } => {}
         Event::DeviceEvent(_device_id, _event) => {}
         Event::Update(_dt) => {}
         Event::Awakened => {}
@@ -171,12 +169,9 @@ fn check_new(app: &App, model: &mut Model) {
 
 fn window_event(app: &App, model: &mut Model, event: WindowEvent) {
     if model.mode == GameMode::SinglePlayer {
-        match model.board.current_player {
-            player::Player::Computer => {
-                model.board.computer_move();
-            }
-            _ => {}
-        };
+        if let player::Player::Computer = model.board.current_player {
+            model.board.computer_move();
+        }
     }
     match event {
         KeyPressed(_key) => {}

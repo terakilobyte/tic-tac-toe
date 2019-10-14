@@ -28,13 +28,3 @@ impl std::string::ToString for Field {
         }
     }
 }
-
-// impl fmt::Display for Field {
-//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-//         match self {
-//             Field::Empty => write!(f, ""),
-//             Field::O => write!(f, "O"),
-//             Field::X => write!(f, "X"),
-//         }
-//     }
-// }

@@ -9,10 +9,7 @@ pub struct Eval {
 
 impl Eval {
     pub fn new(position: usize, score: i64) -> Eval {
-        Eval {
-            position: position,
-            score: score,
-        }
+        Eval { position, score }
     }
 }
 
@@ -39,6 +36,6 @@ impl Eq for Eval {}
 
 impl fmt::Display for Eval {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "pos: {},score: {}\n", self.position, self.score)
+        writeln!(f, "pos: {},score: {}", self.position, self.score)
     }
 }
