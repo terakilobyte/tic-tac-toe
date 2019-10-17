@@ -94,6 +94,10 @@ pub fn check_winner(board: &[Field]) -> BoardState {
 mod test {
     #[allow(unused_imports)]
     use super::*;
+    #[allow(unused_imports)]
+    use crate::board::Board;
+    #[allow(unused_imports)]
+    use nannou::geom::Rect;
     #[test]
     fn top_row_human_win() {
         let board = &[
@@ -375,5 +379,33 @@ mod test {
         ];
         let actual = check_winner(board);
         assert_eq!(actual, BoardState::Winner(Player::Computer, (2, 4, 6)),);
+    }
+    #[test]
+    fn computer_optimal_play() {
+        let mut field = Field::X;
+        let mut game = Board::new(Rect::from_w_h(800.0, 800.0));
+        let mut winner = None;
+        (0..90).any(|_| {
+            let eval = minimax(game.state, &game.board, game.current_player, 0);
+            game.board[eval.position] = field;
+            game.made_move();
+            match game.state {
+                BoardState::InGame => {
+                    field = -field;
+                    return false;
+                }
+                BoardState::Tie => {
+                    // game.board = (0..9).map(|_| Field::Empty).collect();
+                    let new_game = Board::new(game.rect);
+                    std::mem::replace(&mut game, new_game);
+                    return false;
+                }
+                _ => {
+                    winner = Some("winner");
+                    return true;
+                }
+            }
+        });
+        assert!(winner.is_none());
     }
 }

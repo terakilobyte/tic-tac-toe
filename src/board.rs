@@ -39,7 +39,7 @@ impl Board {
         }
     }
 
-    fn made_move(&mut self) {
+    pub fn made_move(&mut self) {
         self.state = brain::check_winner(&self.board);
         self.current_player = -self.current_player;
     }
