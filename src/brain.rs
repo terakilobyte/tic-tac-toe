@@ -78,14 +78,13 @@ pub fn check_winner(board: &[Field]) -> BoardState {
             } else if board[ts[0]] == Field::O {
                 winning =
                     Some(BoardState::Winner(Player::Computer, (ts[0], ts[1], ts[2])));
-            } else if board[ts[0]] == Field::Empty {
-                return false;
             }
             return true;
         }
         false
     });
-    if !board.contains(&Field::Empty) {
+
+    if !board.contains(&Field::Empty) && winning.is_none() {
         winning = Some(BoardState::Tie);
     }
     winning.unwrap_or_else(|| BoardState::InGame)
