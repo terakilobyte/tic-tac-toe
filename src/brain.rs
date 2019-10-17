@@ -75,11 +75,12 @@ pub fn check_winner(board: &[Field]) -> BoardState {
         if board[ts[0]] == board[ts[1]] && board[ts[1]] == board[ts[2]] {
             if board[ts[0]] == Field::X {
                 winning = Some(BoardState::Winner(Player::Human, (ts[0], ts[1], ts[2])));
+                return true;
             } else if board[ts[0]] == Field::O {
                 winning =
                     Some(BoardState::Winner(Player::Computer, (ts[0], ts[1], ts[2])));
+                return true;
             }
-            return true;
         }
         false
     });
