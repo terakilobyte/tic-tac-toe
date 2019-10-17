@@ -90,3 +90,290 @@ pub fn check_winner(board: &[Field]) -> BoardState {
     }
     winning.unwrap_or_else(|| BoardState::InGame)
 }
+
+mod test {
+    #[allow(unused_imports)]
+    use super::*;
+    #[test]
+    fn top_row_human_win() {
+        let board = &[
+            Field::X,
+            Field::X,
+            Field::X,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+        ];
+        let actual = check_winner(board);
+        assert_eq!(
+            actual,
+            BoardState::Winner(Player::Human, (0, 1, 2)),
+            "Human Win"
+        );
+    }
+    #[test]
+    fn mid_row_human_win() {
+        let board = &[
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::X,
+            Field::X,
+            Field::X,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+        ];
+        let actual = check_winner(board);
+        assert_eq!(
+            actual,
+            BoardState::Winner(Player::Human, (3, 4, 5)),
+            "Human Win"
+        );
+    }
+    #[test]
+    fn bot_row_human_win() {
+        let board = &[
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::X,
+            Field::X,
+            Field::X,
+        ];
+        let actual = check_winner(board);
+        assert_eq!(
+            actual,
+            BoardState::Winner(Player::Human, (6, 7, 8)),
+            "Human Win"
+        );
+    }
+    #[test]
+    fn top_row_comp_win() {
+        let board = &[
+            Field::O,
+            Field::O,
+            Field::O,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+        ];
+        let actual = check_winner(board);
+        assert_eq!(
+            actual,
+            BoardState::Winner(Player::Computer, (0, 1, 2)),
+            "Computer Win"
+        );
+    }
+    #[test]
+    fn mid_row_comp_win() {
+        let board = &[
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::O,
+            Field::O,
+            Field::O,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+        ];
+        let actual = check_winner(board);
+        assert_eq!(
+            actual,
+            BoardState::Winner(Player::Computer, (3, 4, 5)),
+            "Computer Win"
+        );
+    }
+    #[test]
+    fn bot_row_comp_win() {
+        let board = &[
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::O,
+            Field::O,
+            Field::O,
+        ];
+        let actual = check_winner(board);
+        assert_eq!(
+            actual,
+            BoardState::Winner(Player::Computer, (6, 7, 8)),
+            "Computer Win"
+        );
+    }
+    #[test]
+    fn left_col_human_win() {
+        let board = &[
+            Field::X,
+            Field::Empty,
+            Field::Empty,
+            Field::X,
+            Field::Empty,
+            Field::Empty,
+            Field::X,
+            Field::Empty,
+            Field::Empty,
+        ];
+        let actual = check_winner(board);
+        assert_eq!(actual, BoardState::Winner(Player::Human, (0, 3, 6)),);
+    }
+    #[test]
+    fn mid_col_human_win() {
+        let board = &[
+            Field::Empty,
+            Field::X,
+            Field::Empty,
+            Field::Empty,
+            Field::X,
+            Field::Empty,
+            Field::Empty,
+            Field::X,
+            Field::Empty,
+        ];
+        let actual = check_winner(board);
+        assert_eq!(actual, BoardState::Winner(Player::Human, (1, 4, 7)),);
+    }
+    #[test]
+    fn right_col_human_win() {
+        let board = &[
+            Field::Empty,
+            Field::Empty,
+            Field::X,
+            Field::Empty,
+            Field::Empty,
+            Field::X,
+            Field::Empty,
+            Field::Empty,
+            Field::X,
+        ];
+        let actual = check_winner(board);
+        assert_eq!(actual, BoardState::Winner(Player::Human, (2, 5, 8)),);
+    }
+    #[test]
+    fn left_col_comp_win() {
+        let board = &[
+            Field::O,
+            Field::Empty,
+            Field::Empty,
+            Field::O,
+            Field::Empty,
+            Field::Empty,
+            Field::O,
+            Field::Empty,
+            Field::Empty,
+        ];
+        let actual = check_winner(board);
+        assert_eq!(actual, BoardState::Winner(Player::Computer, (0, 3, 6)),);
+    }
+    #[test]
+    fn mid_col_comp_win() {
+        let board = &[
+            Field::Empty,
+            Field::O,
+            Field::Empty,
+            Field::Empty,
+            Field::O,
+            Field::Empty,
+            Field::Empty,
+            Field::O,
+            Field::Empty,
+        ];
+        let actual = check_winner(board);
+        assert_eq!(actual, BoardState::Winner(Player::Computer, (1, 4, 7)),);
+    }
+    #[test]
+    fn right_col_comp_win() {
+        let board = &[
+            Field::Empty,
+            Field::Empty,
+            Field::O,
+            Field::Empty,
+            Field::Empty,
+            Field::O,
+            Field::Empty,
+            Field::Empty,
+            Field::O,
+        ];
+        let actual = check_winner(board);
+        assert_eq!(actual, BoardState::Winner(Player::Computer, (2, 5, 8)),);
+    }
+    #[test]
+    fn left_diag_human_win() {
+        let board = &[
+            Field::X,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::X,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::X,
+        ];
+        let actual = check_winner(board);
+        assert_eq!(actual, BoardState::Winner(Player::Human, (0, 4, 8)),);
+    }
+    #[test]
+    fn right_diag_human_win() {
+        let board = &[
+            Field::Empty,
+            Field::Empty,
+            Field::X,
+            Field::Empty,
+            Field::X,
+            Field::Empty,
+            Field::X,
+            Field::Empty,
+            Field::Empty,
+        ];
+        let actual = check_winner(board);
+        assert_eq!(actual, BoardState::Winner(Player::Human, (2, 4, 6)),);
+    }
+    #[test]
+    fn left_diag_comp_win() {
+        let board = &[
+            Field::O,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::O,
+            Field::Empty,
+            Field::Empty,
+            Field::Empty,
+            Field::O,
+        ];
+        let actual = check_winner(board);
+        assert_eq!(actual, BoardState::Winner(Player::Computer, (0, 4, 8)),);
+    }
+    #[test]
+    fn right_diag_comp_win() {
+        let board = &[
+            Field::Empty,
+            Field::Empty,
+            Field::O,
+            Field::Empty,
+            Field::O,
+            Field::Empty,
+            Field::O,
+            Field::Empty,
+            Field::Empty,
+        ];
+        let actual = check_winner(board);
+        assert_eq!(actual, BoardState::Winner(Player::Computer, (2, 4, 6)),);
+    }
+}
