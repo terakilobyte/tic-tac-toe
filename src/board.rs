@@ -1,4 +1,5 @@
 use crate::brain;
+use crate::model::PlayerMode;
 use crate::player::Player;
 use crate::Field;
 use nannou::prelude::*;
@@ -21,20 +22,21 @@ pub struct Board {
 }
 
 impl Board {
-    pub fn new(rect: geom::Rect) -> Self {
+    pub fn new(rect: geom::Rect, player_mode: PlayerMode) -> Self {
+        let player = Player::from(player_mode);
         Board {
             rect,
             board: (0..9).map(|_| Field::Empty).collect(),
-            player_1: Player::Human,
-            player_2: Player::Computer,
-            current_player: Player::Human,
+            player_1: player,
+            player_2: -player,
+            current_player: Player::Player1,
             state: BoardState::InGame,
         }
     }
     pub fn computer_move(&mut self) {
-        if self.state == BoardState::InGame && self.current_player == Player::Computer {
+        if self.state == BoardState::InGame {
             let eval = brain::minimax(self.state, &self.board, self.current_player, 0);
-            self.board[eval.position] = Field::O;
+            self.board[eval.position] = self.current_player.get_sigil();
             self.made_move();
         }
     }
@@ -85,13 +87,13 @@ impl Board {
                     return;
                 }
                 match self.current_player {
-                    Player::Human => self.board[location] = Field::X,
-                    Player::Computer => self.board[location] = Field::O,
+                    Player::Player1 => self.board[location] = Field::X,
+                    Player::Player2 => self.board[location] = Field::O,
                 }
                 self.made_move();
             }
             _ => {
-                let new_self = Self::new(self.rect);
+                let new_self = Self::new(self.rect, PlayerMode::PlayUndecided);
                 std::mem::replace(self, new_self);
             }
         };

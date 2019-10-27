@@ -17,8 +17,8 @@ pub fn minimax(state: BoardState, board: &[Field], player: Player, depth: i64) -
                     Field::Empty => {
                         let mut cloned_board = Vec::from(board).clone();
                         let new_field = match player {
-                            Player::Human => Field::X,
-                            Player::Computer => Field::O,
+                            Player::Player1 => Field::X,
+                            Player::Player2 => Field::O,
                         };
                         cloned_board[i] = new_field;
                         let score = minimax(
@@ -36,22 +36,22 @@ pub fn minimax(state: BoardState, board: &[Field], player: Player, depth: i64) -
             let mut cloned_evals = evaluated_moves.clone();
             cloned_evals.sort();
             match player {
-                Player::Human => {
-                    let last = cloned_evals.last();
-                    *last.unwrap()
-                }
-                Player::Computer => {
+                Player::Player1 => {
                     let first = cloned_evals.first();
                     *first.unwrap()
+                }
+                Player::Player2 => {
+                    let last = cloned_evals.last();
+                    *last.unwrap()
                 }
             }
         }
         winner => match winner {
-            BoardState::Winner(Player::Human, _) => Eval {
+            BoardState::Winner(Player::Player1, _) => Eval {
                 position: 0,
                 score: depth - 10,
             },
-            BoardState::Winner(Player::Computer, _x) => Eval {
+            BoardState::Winner(Player::Player2, _x) => Eval {
                 position: 0,
                 score: 10 - depth,
             },
@@ -74,11 +74,11 @@ pub fn check_winner(board: &[Field]) -> BoardState {
     winning_boards.iter().any(|ts| {
         if board[ts[0]] == board[ts[1]] && board[ts[1]] == board[ts[2]] {
             if board[ts[0]] == Field::X {
-                winning = Some(BoardState::Winner(Player::Human, (ts[0], ts[1], ts[2])));
+                winning = Some(BoardState::Winner(Player::Player1, (ts[0], ts[1], ts[2])));
                 return true;
             } else if board[ts[0]] == Field::O {
                 winning =
-                    Some(BoardState::Winner(Player::Computer, (ts[0], ts[1], ts[2])));
+                    Some(BoardState::Winner(Player::Player2, (ts[0], ts[1], ts[2])));
                 return true;
             }
         }
@@ -115,8 +115,8 @@ mod test {
         let actual = check_winner(board);
         assert_eq!(
             actual,
-            BoardState::Winner(Player::Human, (0, 1, 2)),
-            "Human Win"
+            BoardState::Winner(Player::Player1, (0, 1, 2)),
+            "Player 1 Win"
         );
     }
     #[test]
@@ -135,8 +135,8 @@ mod test {
         let actual = check_winner(board);
         assert_eq!(
             actual,
-            BoardState::Winner(Player::Human, (3, 4, 5)),
-            "Human Win"
+            BoardState::Winner(Player::Player1, (3, 4, 5)),
+            "Player 1 Win"
         );
     }
     #[test]
@@ -155,8 +155,8 @@ mod test {
         let actual = check_winner(board);
         assert_eq!(
             actual,
-            BoardState::Winner(Player::Human, (6, 7, 8)),
-            "Human Win"
+            BoardState::Winner(Player::Player1, (6, 7, 8)),
+            "Player1 Win"
         );
     }
     #[test]
@@ -176,8 +176,8 @@ mod test {
         let actual = check_winner(board);
         assert_eq!(
             actual,
-            BoardState::Winner(Player::Computer, (0, 1, 2)),
-            "Computer Win"
+            BoardState::Winner(Player::Player2, (0, 1, 2)),
+            "Player2 Win"
         );
     }
     #[test]
@@ -196,8 +196,8 @@ mod test {
         let actual = check_winner(board);
         assert_eq!(
             actual,
-            BoardState::Winner(Player::Computer, (3, 4, 5)),
-            "Computer Win"
+            BoardState::Winner(Player::Player2, (3, 4, 5)),
+            "Player2 Win"
         );
     }
     #[test]
@@ -216,8 +216,8 @@ mod test {
         let actual = check_winner(board);
         assert_eq!(
             actual,
-            BoardState::Winner(Player::Computer, (6, 7, 8)),
-            "Computer Win"
+            BoardState::Winner(Player::Player2, (6, 7, 8)),
+            "Player2 Win"
         );
     }
     #[test]
@@ -234,7 +234,7 @@ mod test {
             Field::Empty,
         ];
         let actual = check_winner(board);
-        assert_eq!(actual, BoardState::Winner(Player::Human, (0, 3, 6)),);
+        assert_eq!(actual, BoardState::Winner(Player::Player1, (0, 3, 6)),);
     }
     #[test]
     fn mid_col_human_win() {
@@ -250,7 +250,7 @@ mod test {
             Field::Empty,
         ];
         let actual = check_winner(board);
-        assert_eq!(actual, BoardState::Winner(Player::Human, (1, 4, 7)),);
+        assert_eq!(actual, BoardState::Winner(Player::Player1, (1, 4, 7)),);
     }
     #[test]
     fn right_col_human_win() {
@@ -266,7 +266,7 @@ mod test {
             Field::X,
         ];
         let actual = check_winner(board);
-        assert_eq!(actual, BoardState::Winner(Player::Human, (2, 5, 8)),);
+        assert_eq!(actual, BoardState::Winner(Player::Player1, (2, 5, 8)),);
     }
     #[test]
     fn left_col_comp_win() {
@@ -282,7 +282,7 @@ mod test {
             Field::Empty,
         ];
         let actual = check_winner(board);
-        assert_eq!(actual, BoardState::Winner(Player::Computer, (0, 3, 6)),);
+        assert_eq!(actual, BoardState::Winner(Player::Player2, (0, 3, 6)),);
     }
     #[test]
     fn mid_col_comp_win() {
@@ -298,7 +298,7 @@ mod test {
             Field::Empty,
         ];
         let actual = check_winner(board);
-        assert_eq!(actual, BoardState::Winner(Player::Computer, (1, 4, 7)),);
+        assert_eq!(actual, BoardState::Winner(Player::Player2, (1, 4, 7)),);
     }
     #[test]
     fn right_col_comp_win() {
@@ -314,7 +314,7 @@ mod test {
             Field::O,
         ];
         let actual = check_winner(board);
-        assert_eq!(actual, BoardState::Winner(Player::Computer, (2, 5, 8)),);
+        assert_eq!(actual, BoardState::Winner(Player::Player2, (2, 5, 8)),);
     }
     #[test]
     fn left_diag_human_win() {
@@ -330,7 +330,7 @@ mod test {
             Field::X,
         ];
         let actual = check_winner(board);
-        assert_eq!(actual, BoardState::Winner(Player::Human, (0, 4, 8)),);
+        assert_eq!(actual, BoardState::Winner(Player::Player1, (0, 4, 8)),);
     }
     #[test]
     fn right_diag_human_win() {
@@ -346,7 +346,7 @@ mod test {
             Field::Empty,
         ];
         let actual = check_winner(board);
-        assert_eq!(actual, BoardState::Winner(Player::Human, (2, 4, 6)),);
+        assert_eq!(actual, BoardState::Winner(Player::Player1, (2, 4, 6)),);
     }
     #[test]
     fn left_diag_comp_win() {
@@ -362,7 +362,7 @@ mod test {
             Field::O,
         ];
         let actual = check_winner(board);
-        assert_eq!(actual, BoardState::Winner(Player::Computer, (0, 4, 8)),);
+        assert_eq!(actual, BoardState::Winner(Player::Player2, (0, 4, 8)),);
     }
     #[test]
     fn right_diag_comp_win() {
@@ -378,7 +378,7 @@ mod test {
             Field::Empty,
         ];
         let actual = check_winner(board);
-        assert_eq!(actual, BoardState::Winner(Player::Computer, (2, 4, 6)),);
+        assert_eq!(actual, BoardState::Winner(Player::Player2, (2, 4, 6)),);
     }
     #[test]
     fn computer_optimal_play() {

@@ -15,8 +15,7 @@ impl Eval {
 
 impl Ord for Eval {
     fn cmp(&self, other: &Self) -> Ordering {
-        // self.score.cmp(&other.score)
-        other.score.cmp(&self.score)
+        self.score.cmp(&other.score)
     }
 }
 

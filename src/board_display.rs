@@ -185,8 +185,8 @@ impl Board {
             winner => {
                 self.show_selections(draw, rect);
                 let (winning_player, winning_pos) = match winner {
-                    BoardState::Winner(Player::Human, x) => (Field::X, x),
-                    BoardState::Winner(Player::Computer, x) => (Field::O, x),
+                    BoardState::Winner(Player::Player1, x) => (Field::X, x),
+                    BoardState::Winner(Player::Player2, x) => (Field::O, x),
                     _ => unreachable!(),
                 };
                 self.show_winner(draw, rect, *winning_pos);
